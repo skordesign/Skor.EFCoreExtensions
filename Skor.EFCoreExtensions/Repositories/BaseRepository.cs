@@ -102,11 +102,15 @@ namespace Skor.EFCoreExtensions.Repositories
             }
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        public async Task<IEnumerable<TEntity>> GetAllAsync(int page = 0, int take = 0)
         {
             try
             {
                 IEnumerable<TEntity> listEntity = await this.dbSet.AsNoTracking().ToListAsync();
+                if (take > 0)
+                {
+                    return listEntity.Skip(page * take).Take(take);
+                }
                 return listEntity;
             }
             catch (Exception err)
@@ -116,11 +120,15 @@ namespace Skor.EFCoreExtensions.Repositories
             }
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate)
+        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate, int page = 0, int take = 0)
         {
             try
             {
                 IEnumerable<TEntity> listEntity = await this.dbSet.AsNoTracking().Where(predicate).ToListAsync();
+                if (take > 0)
+                {
+                    return listEntity.Skip(page * take).Take(take);
+                }
                 return listEntity;
             }
             catch (Exception err)
@@ -272,11 +280,15 @@ namespace Skor.EFCoreExtensions.Repositories
             }
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public IEnumerable<TEntity> GetAll(int page = 0, int take = 0)
         {
             try
             {
                 IEnumerable<TEntity> listEntity = this.dbSet.AsNoTracking().ToList();
+                if (take > 0)
+                {
+                    return listEntity.Skip(page * take).Take(take);
+                }
                 return listEntity;
             }
             catch (Exception err)
@@ -286,11 +298,15 @@ namespace Skor.EFCoreExtensions.Repositories
             }
         }
 
-        public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate)
+        public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate, int page = 0, int take = 0)
         {
             try
             {
                 IEnumerable<TEntity> listEntity = this.dbSet.AsNoTracking().Where(predicate).ToList();
+                if (take > 0)
+                {
+                    return listEntity.Skip(page * take).Take(take);
+                }
                 return listEntity;
             }
             catch (Exception err)

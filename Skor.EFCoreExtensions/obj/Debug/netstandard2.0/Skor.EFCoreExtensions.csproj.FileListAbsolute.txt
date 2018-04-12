@@ -1,0 +1,14 @@
+C:\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions\bin\Debug\netstandard2.0\Skor.EFCoreExtensions.deps.json
+C:\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions\bin\Debug\netstandard2.0\Skor.EFCoreExtensions.dll
+C:\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions\bin\Debug\netstandard2.0\Skor.EFCoreExtensions.pdb
+C:\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions\bin\Debug\netstandard2.0\Microsoft.EntityFrameworkCore.dll
+C:\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions\bin\Debug\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions\bin\Debug\netstandard2.0\Microsoft.EntityFrameworkCore.xml
+C:\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions\bin\Debug\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.xml
+C:\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions\obj\Debug\netstandard2.0\Skor.EFCoreExtensions.csprojResolveAssemblyReference.cache
+C:\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions\obj\Debug\netstandard2.0\Skor.EFCoreExtensions.csproj.CoreCompileInputs.cache
+C:\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions\obj\Debug\netstandard2.0\Skor.EFCoreExtensions.AssemblyInfoInputs.cache
+C:\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions\obj\Debug\netstandard2.0\Skor.EFCoreExtensions.AssemblyInfo.cs
+C:\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions\obj\Debug\netstandard2.0\Skor.EFCoreExtensions.csproj.CopyComplete
+C:\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions\obj\Debug\netstandard2.0\Skor.EFCoreExtensions.dll
+C:\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions\obj\Debug\netstandard2.0\Skor.EFCoreExtensions.pdb
