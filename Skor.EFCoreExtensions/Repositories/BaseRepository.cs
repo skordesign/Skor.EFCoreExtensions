@@ -30,10 +30,10 @@ namespace Skor.EFCoreExtensions.Repositories
                     return entity;
                 }
             }
-            catch (Exception err)
+            catch (Exception e)
             {
-                Console.WriteLine(err.Message);
-                return new TEntity();
+                Console.WriteLine(e.Message);
+                throw e;
             }
         }
 
@@ -53,10 +53,10 @@ namespace Skor.EFCoreExtensions.Repositories
                     return entity;
                 }
             }
-            catch (Exception err)
+            catch (Exception e)
             {
-                Console.WriteLine(err.Message);
-                return new List<TEntity>();
+                Console.WriteLine(e.Message);
+                throw e;
             }
         }
 
@@ -85,11 +85,8 @@ namespace Skor.EFCoreExtensions.Repositories
             {
                 using (var transaction = await this.context.Database.BeginTransactionAsync())
                 {
-                    IEnumerable<TEntity> listItem = this.dbSet.AsNoTracking().Where(predicate);
-                    foreach (var item in listItem)
-                    {
-                        this.dbSet.Remove(item);
-                    }
+                    IEnumerable<TEntity> listItem = this.dbSet.AsNoTracking().Where(predicate).ToList();
+                    this.dbSet.RemoveRange(listItem);
                     await this.context.SaveChangesAsync();
                     transaction.Commit();
                     return true;
@@ -106,17 +103,17 @@ namespace Skor.EFCoreExtensions.Repositories
         {
             try
             {
-                IEnumerable<TEntity> listEntity = await this.dbSet.AsNoTracking().ToListAsync();
+                IQueryable<TEntity> listEntity =  this.dbSet.AsNoTracking();
                 if (take > 0)
                 {
                     return listEntity.Skip(page * take).Take(take);
                 }
-                return listEntity;
+                return await listEntity.ToListAsync();
             }
             catch (Exception err)
             {
                 Console.WriteLine(err.Message);
-                return new List<TEntity>();
+                throw err;
             }
         }
 
@@ -124,17 +121,17 @@ namespace Skor.EFCoreExtensions.Repositories
         {
             try
             {
-                IEnumerable<TEntity> listEntity = await this.dbSet.AsNoTracking().Where(predicate).ToListAsync();
+                IQueryable<TEntity> listEntity =  this.dbSet.AsNoTracking().Where(predicate);
                 if (take > 0)
                 {
                     return listEntity.Skip(page * take).Take(take);
                 }
-                return listEntity;
+                return await listEntity.ToListAsync();
             }
             catch (Exception err)
             {
                 Console.WriteLine(err.Message);
-                return new List<TEntity>();
+                throw err;
             }
         }
 
@@ -284,12 +281,12 @@ namespace Skor.EFCoreExtensions.Repositories
         {
             try
             {
-                IEnumerable<TEntity> listEntity = this.dbSet.AsNoTracking().ToList();
+                IQueryable<TEntity> listEntity = this.dbSet.AsNoTracking();
                 if (take > 0)
                 {
                     return listEntity.Skip(page * take).Take(take);
                 }
-                return listEntity;
+                return listEntity.ToList();
             }
             catch (Exception err)
             {
@@ -302,12 +299,12 @@ namespace Skor.EFCoreExtensions.Repositories
         {
             try
             {
-                IEnumerable<TEntity> listEntity = this.dbSet.AsNoTracking().Where(predicate).ToList();
+                IQueryable<TEntity> listEntity = this.dbSet.AsNoTracking().Where(predicate);
                 if (take > 0)
                 {
                     return listEntity.Skip(page * take).Take(take);
                 }
-                return listEntity;
+                return listEntity.ToList();
             }
             catch (Exception err)
             {
@@ -428,10 +425,10 @@ namespace Skor.EFCoreExtensions.Repositories
                     return true;
                 }
             }
-            catch (Exception err)
+            catch (Exception e)
             {
-                Console.WriteLine(err.Message);
-                return false;
+                Console.WriteLine(e.Message);
+                throw e;
             }
         }
 
@@ -442,19 +439,16 @@ namespace Skor.EFCoreExtensions.Repositories
                 using (var transaction = this.context.Database.BeginTransaction())
                 {
                     IEnumerable<TEntity> listItem = this.dbSet.AsNoTracking().Where(predicate);
-                    foreach (var item in listItem)
-                    {
-                        this.dbSet.Remove(item);
-                    }
+                    this.dbSet.RemoveRange(listItem);
                     this.context.SaveChanges();
                     transaction.Commit();
                     return true;
                 }
             }
-            catch (Exception err)
+            catch (Exception e)
             {
-                Console.WriteLine(err.Message);
-                return false;
+                Console.WriteLine(e.Message);
+                throw e;
             }
         }
     }
