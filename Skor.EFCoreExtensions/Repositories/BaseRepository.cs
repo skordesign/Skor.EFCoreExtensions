@@ -103,12 +103,12 @@ namespace Skor.EFCoreExtensions.Repositories
         {
             try
             {
-                IQueryable<TEntity> listEntity =  this.dbSet.AsNoTracking();
+                IQueryable<TEntity> listEntity =  this.dbSet;
                 if (take > 0)
                 {
                     return listEntity.Skip(page * take).Take(take);
                 }
-                return await listEntity.ToListAsync();
+                return await listEntity.AsNoTracking().ToListAsync();
             }
             catch (Exception err)
             {
@@ -121,12 +121,12 @@ namespace Skor.EFCoreExtensions.Repositories
         {
             try
             {
-                IQueryable<TEntity> listEntity =  this.dbSet.AsNoTracking().Where(predicate);
+                IQueryable<TEntity> listEntity =  this.dbSet.Where(predicate);
                 if (take > 0)
                 {
                     return listEntity.Skip(page * take).Take(take);
                 }
-                return await listEntity.ToListAsync();
+                return await listEntity.AsNoTracking().ToListAsync();
             }
             catch (Exception err)
             {
@@ -281,12 +281,12 @@ namespace Skor.EFCoreExtensions.Repositories
         {
             try
             {
-                IQueryable<TEntity> listEntity = this.dbSet.AsNoTracking();
+                IQueryable<TEntity> listEntity = this.dbSet;
                 if (take > 0)
                 {
                     return listEntity.Skip(page * take).Take(take);
                 }
-                return listEntity.ToList();
+                return listEntity.AsNoTracking().ToList();
             }
             catch (Exception err)
             {
@@ -299,12 +299,12 @@ namespace Skor.EFCoreExtensions.Repositories
         {
             try
             {
-                IQueryable<TEntity> listEntity = this.dbSet.AsNoTracking().Where(predicate);
+                IQueryable<TEntity> listEntity = this.dbSet.Where(predicate);
                 if (take > 0)
                 {
                     return listEntity.Skip(page * take).Take(take);
                 }
-                return listEntity.ToList();
+                return listEntity.AsNoTracking().ToList();
             }
             catch (Exception err)
             {
@@ -326,10 +326,10 @@ namespace Skor.EFCoreExtensions.Repositories
                     return entity;
                 }
             }
-            catch (Exception err)
+            catch (Exception e)
             {
-                Console.WriteLine(err.Message);
-                return new TEntity();
+                Console.WriteLine(e.Message);
+                throw e;
             }
         }
 
@@ -352,10 +352,10 @@ namespace Skor.EFCoreExtensions.Repositories
                     return entity;
                 }
             }
-            catch (Exception err)
+            catch (Exception e)
             {
-                Console.WriteLine(err.Message);
-                return new List<TEntity>();
+                Console.WriteLine(e.Message);
+                throw e;
             }
         }
 
@@ -373,10 +373,10 @@ namespace Skor.EFCoreExtensions.Repositories
                     entry.State = EntityState.Detached;
                     return entity;
                 }
-                catch (Exception ex)
+                catch (Exception e)
                 {
-                    Console.WriteLine(ex.Message);
-                    return new TEntity();
+                    Console.WriteLine(e.Message);
+                    throw e;
                 }
             }
         }
@@ -404,10 +404,10 @@ namespace Skor.EFCoreExtensions.Repositories
                     }
                     return entities;
                 }
-                catch (Exception ex)
+                catch (Exception e)
                 {
-                    Console.WriteLine(ex.Message);
-                    return new List<TEntity>();
+                    Console.WriteLine(e.Message);
+                    throw e;
                 }
             }
         }

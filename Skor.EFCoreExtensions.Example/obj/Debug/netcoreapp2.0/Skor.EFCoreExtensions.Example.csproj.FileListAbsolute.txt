@@ -12,3 +12,17 @@ C:\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions.Example\obj\Debug\netcore
 C:\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions.Example\obj\Debug\netcoreapp2.0\Skor.EFCoreExtensions.Example.csproj.CopyComplete
 C:\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions.Example\obj\Debug\netcoreapp2.0\Skor.EFCoreExtensions.Example.dll
 C:\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions.Example\obj\Debug\netcoreapp2.0\Skor.EFCoreExtensions.Example.pdb
+C:\Workspace\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions.Example\obj\Debug\netcoreapp2.0\Skor.EFCoreExtensions.Example.dll
+C:\Workspace\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions.Example\obj\Debug\netcoreapp2.0\Skor.EFCoreExtensions.Example.pdb
+C:\Workspace\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions.Example\bin\Debug\netcoreapp2.0\Skor.EFCoreExtensions.Example.deps.json
+C:\Workspace\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions.Example\bin\Debug\netcoreapp2.0\Skor.EFCoreExtensions.Example.runtimeconfig.json
+C:\Workspace\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions.Example\bin\Debug\netcoreapp2.0\Skor.EFCoreExtensions.Example.runtimeconfig.dev.json
+C:\Workspace\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions.Example\bin\Debug\netcoreapp2.0\Skor.EFCoreExtensions.Example.dll
+C:\Workspace\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions.Example\bin\Debug\netcoreapp2.0\Skor.EFCoreExtensions.Example.pdb
+C:\Workspace\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions.Example\bin\Debug\netcoreapp2.0\Skor.EFCoreExtensions.dll
+C:\Workspace\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions.Example\bin\Debug\netcoreapp2.0\Skor.EFCoreExtensions.pdb
+C:\Workspace\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions.Example\obj\Debug\netcoreapp2.0\Skor.EFCoreExtensions.Example.csprojAssemblyReference.cache
+C:\Workspace\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions.Example\obj\Debug\netcoreapp2.0\Skor.EFCoreExtensions.Example.csproj.CoreCompileInputs.cache
+C:\Workspace\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions.Example\obj\Debug\netcoreapp2.0\Skor.EFCoreExtensions.Example.AssemblyInfoInputs.cache
+C:\Workspace\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions.Example\obj\Debug\netcoreapp2.0\Skor.EFCoreExtensions.Example.AssemblyInfo.cs
+C:\Workspace\Workspace\Git\Skor.Extensions\Skor.EFCoreExtensions.Example\obj\Debug\netcoreapp2.0\Skor.EFCoreExtensions.Example.csproj.CopyComplete

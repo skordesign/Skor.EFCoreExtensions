@@ -9,6 +9,10 @@ namespace Skor.EFCoreExtensions.Example
 {
     public class ExampleDbContext:DbContext
     {
+        public ExampleDbContext(DbContextOptions<ExampleDbContext> options)
+            : base(options)
+        {
+        }
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -18,9 +22,6 @@ namespace Skor.EFCoreExtensions.Example
                 .WithOne(o => o.Author).HasForeignKey(f => f.AuthorId).OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Book>().HasKey(k => k.Id);
-
-            base.OnModelCreating(modelBuilder);
-
         }
     }
 }
