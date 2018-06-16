@@ -26,10 +26,13 @@ namespace Skor.EFCoreExtensions.Example
             }, ServiceLifetime.Transient);
             services.AddTransientRepository<Author, ExampleDbContext>();
             services.AddTransientRepository<Book, ExampleDbContext>();
+            services.AddTransientRepository<Toilet, ExampleDbContext>();
+            services.AddTransientRepository<ToiletAuthor, ExampleDbContext>();
             services.AddMvc();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IBaseRepository<Author> author, ExampleDbContext db)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IBaseRepository<Author> author, ExampleDbContext db,
+            IBaseRepository<Book> books, IBaseRepository<Toilet> toilet, IBaseRepository<ToiletAuthor> toiletAuthor)
         {
             if (env.IsDevelopment())
             {
@@ -38,9 +41,12 @@ namespace Skor.EFCoreExtensions.Example
             db.Database.EnsureCreated();
             if (author.GetAll().Count() == 0)
             {
-                for (int i = 0; i < 10000; i++)
+                for (int i = 0; i < 100; i++)
                 {
-                    author.Add(new Author { Name = Guid.NewGuid().ToString() });
+                    var a = author.Add(new Author { Name = Guid.NewGuid().ToString() });
+                    books.Add(new Book { AuthorId = a.Id, Name = Guid.NewGuid().ToString() });
+                    var t = toilet.Add(new Toilet { Name = Guid.NewGuid().ToString() });
+                    toiletAuthor.Add(new ToiletAuthor { AuthorId = a.Id, ToiletId = t.Id, Time = DateTime.Now });
                 }
             }
             app.UseMvc(routes =>

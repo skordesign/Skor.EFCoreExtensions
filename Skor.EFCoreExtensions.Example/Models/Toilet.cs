@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 
 namespace Skor.EFCoreExtensions.Example.Models
 {
-    public class Author
+    public class Toilet
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        public virtual ICollection<Book> Books { get; set; }
         public virtual ICollection<ToiletAuthor> ToiletAuthors { get; set; }
     }
 }

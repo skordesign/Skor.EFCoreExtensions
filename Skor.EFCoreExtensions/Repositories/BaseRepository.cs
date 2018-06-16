@@ -36,7 +36,6 @@ namespace Skor.EFCoreExtensions.Repositories
                 throw e;
             }
         }
-
         public async Task<IEnumerable<TEntity>> AddAsync(IEnumerable<TEntity> entity)
         {
             try
@@ -59,7 +58,6 @@ namespace Skor.EFCoreExtensions.Repositories
                 throw e;
             }
         }
-
         public async Task<bool> DeleteAsync(TEntity entity)
         {
             try
@@ -78,7 +76,6 @@ namespace Skor.EFCoreExtensions.Repositories
                 return false;
             }
         }
-
         public async Task<bool> DeleteAsync(Expression<Func<TEntity, bool>> predicate)
         {
             try
@@ -98,7 +95,6 @@ namespace Skor.EFCoreExtensions.Repositories
                 return false;
             }
         }
-
         public async Task<IEnumerable<TEntity>> GetAllAsync(int page = 0, int take = 0)
         {
             try
@@ -116,7 +112,6 @@ namespace Skor.EFCoreExtensions.Repositories
                 throw err;
             }
         }
-
         public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate, int page = 0, int take = 0)
         {
             try
@@ -134,8 +129,7 @@ namespace Skor.EFCoreExtensions.Repositories
                 throw err;
             }
         }
-
-        public async Task<TEntity> GetAsync(long id)
+        public async Task<TEntity> GetAsync(object id)
         {
             try
             {
@@ -150,7 +144,7 @@ namespace Skor.EFCoreExtensions.Repositories
             }
         }
 
-        public async Task<TEntity> GetAsync(params long[] ids)
+        public async Task<TEntity> GetAsync(params object[] ids)
         {
             try
             {
@@ -233,7 +227,7 @@ namespace Skor.EFCoreExtensions.Repositories
         }
 
 
-        public TEntity Get(long id)
+        public TEntity Get(object id)
         {
             try
             {
@@ -248,7 +242,7 @@ namespace Skor.EFCoreExtensions.Repositories
             }
         }
 
-        public TEntity Get(params long[] ids)
+        public TEntity Get(params object[] ids)
         {
             try
             {

@@ -10,32 +10,41 @@ using Skor.EFCoreExtensions.Repositories;
 namespace Skor.EFCoreExtensions.Example.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Test")]
+    [Route("api/test/[action]")]
     public class TestController : Controller
     {
-        private readonly IBaseRepository<Author> baseRepository;
-        public TestController(IBaseRepository<Author> @base)
+        private readonly IBaseRepository<Author> author;
+        private readonly IBaseRepository<ToiletAuthor> toiletAuthor;
+        public TestController(IBaseRepository<Author> author,
+            IBaseRepository<ToiletAuthor> toiletAuthor)
         {
-            baseRepository = @base;
+            this.author = author;
+            this.toiletAuthor = toiletAuthor;
         }
         // GET: api/Test
         [HttpGet]
-        public async Task<IEnumerable<Author>>  Get()
+        public async Task<IEnumerable<Author>>  GetAll()
         {
-            return await baseRepository.GetAllAsync();
+            return await author.GetAllAsync();
         }
 
         // GET: api/Test/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        [HttpGet("{id}")]
+        public async Task<Author> Get(long id)
         {
-            return "value";
+            return await author.GetAsync(id);
         }
-        
+
+        [HttpGet("{id}/{id2}")]
+        public async Task<ToiletAuthor> Get2Id(long id, long id2)
+        {
+            return await toiletAuthor.GetAsync(id,id2);
+        }
         // POST: api/Test
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post()
         {
+
         }
         
         // PUT: api/Test/5
@@ -46,8 +55,15 @@ namespace Skor.EFCoreExtensions.Example.Controllers
         
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(long id)
         {
+            author.Delete(f => f.Id == id);
+        }
+        [HttpDelete("{id}/{id2}")]
+        public bool Delete2Id(long id,long id2)
+        {
+            var tA = toiletAuthor.Get(id, id2);
+            return  toiletAuthor.Delete(tA);
         }
     }
 }

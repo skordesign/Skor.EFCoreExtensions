@@ -5,7 +5,12 @@ VisualStudioVersion = 15.0.27428.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skor.EFCoreExtensions", "Skor.EFCoreExtensions.csproj", "{D80E5350-7954-4D7A-8A54-5B3F69C59562}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skor.EFCoreExtensions.Example", "..\Skor.EFCoreExtensions.Example\Skor.EFCoreExtensions.Example.csproj", "{28BABFC6-9B6F-4969-BF35-BDB94441E790}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skor.EFCoreExtensions.Example", "..\Skor.EFCoreExtensions.Example\Skor.EFCoreExtensions.Example.csproj", "{28BABFC6-9B6F-4969-BF35-BDB94441E790}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{254F5246-2ED7-4D73-9673-780543E2EAB6}"
+	ProjectSection(SolutionItems) = preProject
+		Skor.EFCoreExtensions.nuspec = Skor.EFCoreExtensions.nuspec
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
