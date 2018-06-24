@@ -17,9 +17,9 @@ namespace Skor.EFCoreExtensions.Repositories
         /// <summary>
         /// Get TEntity with primary keys Id[]
         /// </summary>
-        /// <param name="id">Primary keys</param>
+        /// <param name="ids">Primary keys</param>
         /// <returns>TEntity or new TEntity() (without tracking)</returns>
-        Task<TEntity> GetAsync(params object[] id);
+        Task<TEntity> GetAsync(params object[] ids);
         /// <summary>
         /// Get TEntity with predicate
         /// </summary>
@@ -126,7 +126,7 @@ namespace Skor.EFCoreExtensions.Repositories
         /// </summary>
         /// <param name="entities">IEnumerable of TEntity</param>
         /// <returns>IEnumerable of TEntity or Empty IEnumerable of TEntity (without tracking)</returns>
-        IEnumerable<TEntity> Add(IEnumerable<TEntity> entity);
+        IEnumerable<TEntity> Add(IEnumerable<TEntity> entities);
         /// <summary>
         /// Update TEntity (TEntity must no tracking)
         /// </summary>
@@ -151,5 +151,68 @@ namespace Skor.EFCoreExtensions.Repositories
         /// <param name="predicate"> Expression<Func<TEntity, bool>> </param>
         /// <returns>True if deleted or False if failed</returns>
         bool Delete(Expression<Func<TEntity, bool>> predicate);
+        /// <summary>
+        /// Get TEntity and cast it to T with Ids
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="id"></param>
+        /// <returns>T or new T() (without tracking)</returns>
+        T GetAs<T>(params object[] id) where T : class, new();
+        /// <summary>
+        /// Get TEntity and cast it to T with predicate
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="predicate"></param>
+        /// <returns>T or new T() (without tracking)</returns>
+        T GetAs<T>(Expression<Func<TEntity, bool>> predicate) where T : class, new();
+        /// <summary>
+        /// Get list TEntity and cast it to list T with predicate
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="predicate"></param>
+        /// <param name="page">Page to take</param>
+        /// <param name="take">Number item per page</param>
+        /// <returns>IEnumerable<T> or empty list T (without tracking)</returns>
+        IEnumerable<T> GetAllAs<T>(Expression<Func<TEntity, bool>> predicate, int page = 0, int take = 0) where T : class, new();
+        /// <summary>
+        /// Get list TEntity and cast it to list T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="page">Page to take</param>
+        /// <param name="take">Number item per page</param>
+        /// <returns>IEnumerable<T> or empty list T (without tracking)</returns>
+        IEnumerable<T> GetAllAs<T>(int page = 0, int take = 0) where T : class, new();
+
+        /// <summary>
+        /// Get TEntity and cast it to T with Ids
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="id"></param>
+        /// <returns>T or new T() (without tracking)</returns>
+        Task<T> GetAsyncAs<T>(params object[] id) where T : class, new();
+        /// <summary>
+        /// Get TEntity and cast it to T with predicate
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="predicate"></param>
+        /// <returns>T or new T() (without tracking)</returns>
+        Task<T> GetAsyncAs<T>(Expression<Func<TEntity, bool>> predicate) where T : class, new();
+        /// <summary>
+        /// Get list TEntity and cast it to list T with predicate
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="predicate"></param>
+        /// <param name="page">Page to take</param>
+        /// <param name="take">Number item per page</param>
+        /// <returns>IEnumerable<T> or empty list T (without tracking)</returns>
+        Task<IEnumerable<T>> GetAllAsyncAs<T>(Expression<Func<TEntity, bool>> predicate, int page = 0, int take = 0) where T : class, new();
+        /// <summary>
+        /// Get list TEntity and cast it to list T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="page">Page to take</param>
+        /// <param name="take">Number item per page</param>
+        /// <returns>IEnumerable<T> or empty list T (without tracking)</returns>
+        Task<IEnumerable<T>> GetAllAsyncAs<T>(int page = 0, int take = 0) where T : class, new();
     }
 }

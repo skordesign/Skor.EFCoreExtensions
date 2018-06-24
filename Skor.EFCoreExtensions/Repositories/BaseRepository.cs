@@ -26,36 +26,33 @@ namespace Skor.EFCoreExtensions.Repositories
                     await this.dbSet.AddAsync(entity);
                     await this.context.SaveChangesAsync();
                     transaction.Commit();
-                    context.Entry(entity).State = EntityState.Detached;
+                    this.context.Entry(entity).State = EntityState.Detached;
                     return entity;
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                throw e;
+                throw;
             }
         }
-        public async Task<IEnumerable<TEntity>> AddAsync(IEnumerable<TEntity> entity)
+        public async Task<IEnumerable<TEntity>> AddAsync(IEnumerable<TEntity> entities)
         {
             try
             {
                 using (var transaction = await this.context.Database.BeginTransactionAsync())
                 {
-                    foreach (TEntity item in entity)
-                    {
-                        await this.dbSet.AddAsync(item);
-                    }
+                    await this.dbSet.AddRangeAsync(entities);
                     await this.context.SaveChangesAsync();
                     transaction.Commit();
-                    context.Entry(entity).State = EntityState.Detached;
-                    return entity;
+                    context.Entry(entities).State = EntityState.Detached;
+                    return entities;
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                throw e;
+                throw;
             }
         }
         public async Task<bool> DeleteAsync(TEntity entity)
@@ -73,7 +70,7 @@ namespace Skor.EFCoreExtensions.Repositories
             catch (Exception err)
             {
                 Console.WriteLine(err.Message);
-                return false;
+                throw;
             }
         }
         public async Task<bool> DeleteAsync(Expression<Func<TEntity, bool>> predicate)
@@ -92,7 +89,7 @@ namespace Skor.EFCoreExtensions.Repositories
             catch (Exception err)
             {
                 Console.WriteLine(err.Message);
-                return false;
+                throw;
             }
         }
         public async Task<IEnumerable<TEntity>> GetAllAsync(int page = 0, int take = 0)
@@ -102,14 +99,14 @@ namespace Skor.EFCoreExtensions.Repositories
                 IQueryable<TEntity> listEntity =  this.dbSet;
                 if (take > 0)
                 {
-                    return listEntity.Skip(page * take).Take(take);
+                    return await listEntity.AsNoTracking().Skip(page * take).Take(take).ToListAsync();
                 }
                 return await listEntity.AsNoTracking().ToListAsync();
             }
             catch (Exception err)
             {
                 Console.WriteLine(err.Message);
-                throw err;
+                throw;
             }
         }
         public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate, int page = 0, int take = 0)
@@ -119,14 +116,14 @@ namespace Skor.EFCoreExtensions.Repositories
                 IQueryable<TEntity> listEntity =  this.dbSet.Where(predicate);
                 if (take > 0)
                 {
-                    return listEntity.Skip(page * take).Take(take);
+                    return await listEntity.AsNoTracking().Skip(page * take).Take(take).ToListAsync();
                 }
                 return await listEntity.AsNoTracking().ToListAsync();
             }
             catch (Exception err)
             {
                 Console.WriteLine(err.Message);
-                throw err;
+                throw;
             }
         }
         public async Task<TEntity> GetAsync(object id)
@@ -134,13 +131,17 @@ namespace Skor.EFCoreExtensions.Repositories
             try
             {
                 TEntity entity = await this.dbSet.FindAsync(id);
+                if (entity == null)
+                {
+                    return new TEntity();
+                }
                 context.Entry(entity).State = EntityState.Detached;
                 return entity;
             }
             catch (Exception err)
             {
                 Console.WriteLine(err.Message);
-                return new TEntity();
+                throw;
             }
         }
 
@@ -148,14 +149,18 @@ namespace Skor.EFCoreExtensions.Repositories
         {
             try
             {
-                TEntity entity = await this.dbSet.FindAsync(ids.Cast<object>().ToArray());
+                TEntity entity = await this.dbSet.FindAsync(ids);
+                if (entity == null)
+                {
+                    return new TEntity();
+                }
                 context.Entry(entity).State = EntityState.Detached;
                 return entity;
             }
             catch (Exception err)
             {
                 Console.WriteLine(err.Message);
-                return new TEntity();
+                throw;
             }
         }
 
@@ -164,13 +169,17 @@ namespace Skor.EFCoreExtensions.Repositories
             try
             {
                 TEntity entity = await this.dbSet.FirstOrDefaultAsync(predicate);
+                if (entity == null)
+                {
+                    return new TEntity();
+                }
                 context.Entry(entity).State = EntityState.Detached;
                 return entity;
             }
             catch (Exception err)
             {
                 Console.WriteLine(err.Message);
-                return new TEntity();
+                throw;
             }
         }
 
@@ -191,7 +200,7 @@ namespace Skor.EFCoreExtensions.Repositories
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    return new TEntity();
+                    throw;
                 }
             }
         }
@@ -202,43 +211,37 @@ namespace Skor.EFCoreExtensions.Repositories
             {
                 try
                 {
-                    foreach (var entity in entities)
-                    {
-                        var entry = this.context.Entry(entity);
-                        dbSet.Attach(entity);
-                        entry.State = EntityState.Modified;
-                    }
+                    dbSet.AttachRange(entities);
+                    this.context.Entry(entities).State = EntityState.Modified;
                     await this.context.SaveChangesAsync();
                     transaction.Commit();
-                    foreach (var entity in entities)
-                    {
-                        var entry = this.context.Entry(entity);
-                        dbSet.Attach(entity);
-                        entry.State = EntityState.Detached;
-                    }
+                    this.context.Entry(entities).State = EntityState.Detached;
                     return entities;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    return new List<TEntity>();
+                    throw;
                 }
             }
         }
-
 
         public TEntity Get(object id)
         {
             try
             {
                 TEntity entity = this.dbSet.Find(id);
+                if (entity == null)
+                {
+                    return new TEntity();
+                }
                 context.Entry(entity).State = EntityState.Detached;
                 return entity;
             }
             catch (Exception err)
             {
                 Console.WriteLine(err.Message);
-                return new TEntity();
+                throw;
             }
         }
 
@@ -246,14 +249,16 @@ namespace Skor.EFCoreExtensions.Repositories
         {
             try
             {
-                TEntity entity = this.dbSet.Find(ids.Cast<object>().ToArray());
+                TEntity entity = this.dbSet.Find(ids);
+                if (entity == null)
+                    return new TEntity();
                 context.Entry(entity).State = EntityState.Detached;
                 return entity;
             }
             catch (Exception err)
             {
                 Console.WriteLine(err.Message);
-                return new TEntity();
+                throw;
             }
         }
 
@@ -262,12 +267,17 @@ namespace Skor.EFCoreExtensions.Repositories
             try
             {
                 TEntity entity = this.dbSet.FirstOrDefault(predicate);
+                if (entity == null)
+                {
+                    return new TEntity();
+                }
+                context.Entry(entity).State = EntityState.Detached;
                 return entity;
             }
             catch (Exception err)
             {
                 Console.WriteLine(err.Message);
-                return new TEntity();
+                throw;
             }
         }
 
@@ -278,14 +288,14 @@ namespace Skor.EFCoreExtensions.Repositories
                 IQueryable<TEntity> listEntity = this.dbSet;
                 if (take > 0)
                 {
-                    return listEntity.Skip(page * take).Take(take);
+                    return listEntity.Skip(page * take).Take(take).AsNoTracking().ToList();
                 }
                 return listEntity.AsNoTracking().ToList();
             }
             catch (Exception err)
             {
                 Console.WriteLine(err.Message);
-                return new List<TEntity>();
+                throw;
             }
         }
 
@@ -296,14 +306,14 @@ namespace Skor.EFCoreExtensions.Repositories
                 IQueryable<TEntity> listEntity = this.dbSet.Where(predicate);
                 if (take > 0)
                 {
-                    return listEntity.Skip(page * take).Take(take);
+                    return listEntity.Skip(page * take).Take(take).AsNoTracking().ToList();
                 }
                 return listEntity.AsNoTracking().ToList();
             }
             catch (Exception err)
             {
                 Console.WriteLine(err.Message);
-                return new List<TEntity>();
+                throw;
             }
         }
 
@@ -323,33 +333,27 @@ namespace Skor.EFCoreExtensions.Repositories
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                throw e;
+                throw;
             }
         }
 
-        public IEnumerable<TEntity> Add(IEnumerable<TEntity> entity)
+        public IEnumerable<TEntity> Add(IEnumerable<TEntity> entities)
         {
             try
             {
                 using (var transaction = this.context.Database.BeginTransaction())
                 {
-                    foreach (TEntity item in entity)
-                    {
-                        this.dbSet.Add(item);
-                    }
+                    this.dbSet.AddRange(entities);
                     this.context.SaveChanges();
                     transaction.Commit();
-                    foreach (TEntity item in entity)
-                    {
-                        context.Entry(entity).State = EntityState.Detached;
-                    }
-                    return entity;
+                    context.Entry(entities).State = EntityState.Detached;
+                    return entities;
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                throw e;
+                throw;
             }
         }
 
@@ -370,7 +374,7 @@ namespace Skor.EFCoreExtensions.Repositories
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
-                    throw e;
+                    throw;
                 }
             }
         }
@@ -381,27 +385,17 @@ namespace Skor.EFCoreExtensions.Repositories
             {
                 try
                 {
-                    foreach (var entity in entities)
-                    {
-                        var entry = this.context.Entry(entity);
-                        entry.State = EntityState.Detached;
-                        dbSet.Attach(entity);
-                        entry.State = EntityState.Modified;
-                    }
+                    this.context.AttachRange(entities);
+                    this.context.Entry(entities).State = EntityState.Modified;
                     this.context.SaveChanges();
                     transaction.Commit();
-                    foreach (var entity in entities)
-                    {
-                        var entry = this.context.Entry(entity);
-                        dbSet.Attach(entity);
-                        entry.State = EntityState.Detached;
-                    }
+                    this.context.Entry(entities).State = EntityState.Detached;
                     return entities;
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
-                    throw e;
+                    throw;
                 }
             }
         }
@@ -422,7 +416,7 @@ namespace Skor.EFCoreExtensions.Repositories
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                throw e;
+                throw;
             }
         }
 
@@ -442,7 +436,155 @@ namespace Skor.EFCoreExtensions.Repositories
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                throw e;
+                throw;
+            }
+        }
+
+        public T GetAs<T>(params object[] id) where T:class, new()
+        {
+            try
+            {
+                var entity = dbSet.Find(id);
+                if (entity != null)
+                {
+                    context.Entry(entity).State = EntityState.Detached;
+                    return entity as T;
+                }
+                return new T();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
+            }
+        }
+
+        public T GetAs<T>(Expression<Func<TEntity, bool>> predicate) where T : class, new()
+        {
+            try
+            {
+                var entity = dbSet.FirstOrDefault(predicate);
+                if (entity != null)
+                {
+                    context.Entry(entity).State = EntityState.Detached;
+                    return entity as T;
+                }
+                return new T();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
+            }
+        }
+
+        public IEnumerable<T> GetAllAs<T>(Expression<Func<TEntity, bool>> predicate, int page = 0, int take = 0) where T : class, new()
+        {
+            try
+            {
+                IQueryable<TEntity> listEntity = this.dbSet.Where(predicate);
+                if (take > 0)
+                {
+                    return listEntity.Skip(page * take).Take(take).Cast<T>().AsNoTracking().ToList();
+                }
+                return listEntity.AsNoTracking().Cast<T>().ToList();
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message);
+                throw;
+            }
+        }
+
+        public IEnumerable<T> GetAllAs<T>(int page = 0, int take = 0) where T : class, new()
+        {
+            try
+            {
+                IQueryable<TEntity> listEntity = this.dbSet;
+                if (take > 0)
+                {
+                    return listEntity.Skip(page * take).Take(take).Cast<T>().AsNoTracking().ToList();
+                }
+                return listEntity.AsNoTracking().Cast<T>().ToList();
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message);
+                throw;
+            }
+        }
+
+        public async Task<T> GetAsyncAs<T>(params object[] id) where T : class, new()
+        {
+            try
+            {
+                var entity = await dbSet.FindAsync(id);
+                if (entity != null)
+                {
+                    context.Entry(entity).State = EntityState.Detached;
+                    return entity as T;
+                }
+                return new T();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
+            }
+        }
+
+        public async Task<T> GetAsyncAs<T>(Expression<Func<TEntity, bool>> predicate) where T : class, new()
+        {
+            try
+            {
+                var entity = await dbSet.FirstOrDefaultAsync(predicate);
+                if (entity != null)
+                {
+                    context.Entry(entity).State = EntityState.Detached;
+                    return entity as T;
+                }
+                return new T();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsyncAs<T>(Expression<Func<TEntity, bool>> predicate, int page = 0, int take = 0) where T : class, new()
+        {
+            try
+            {
+                IQueryable<TEntity> listEntity = this.dbSet.Where(predicate);
+                if (take > 0)
+                {
+                    return await listEntity.Skip(page * take).Take(take).Cast<T>().AsNoTracking().ToListAsync();
+                }
+                return await listEntity.AsNoTracking().Cast<T>().ToListAsync();
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message);
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsyncAs<T>(int page = 0, int take = 0) where T : class, new()
+        {
+            try
+            {
+                IQueryable<TEntity> listEntity = this.dbSet;
+                if (take > 0)
+                {
+                    return await listEntity.Skip(page * take).Take(take).Cast<T>().AsNoTracking().ToListAsync();
+                }
+                return await listEntity.AsNoTracking().Cast<T>().ToListAsync();
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message);
+                throw;
             }
         }
     }
